@@ -1,0 +1,171 @@
+{
+	"variables": [],
+	"info": {
+		"name": "initiation",
+		"_postman_id": "18514f49-3680-e54c-1f2f-a633b7eecef7",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/addToWallet",
+			"request": {
+				"url": "http://localhost:3000/addToWallet",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"certificatePath\" : \"/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/tlsca/tlsca.manufacturer.pharma-network.com-cert.pem\",\n\t\"privateKeyPath\" : \"/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/tlsca/ce15710b26b1818861b969807c48673a60b4f2bc33d5d0dcf62a292903759c7a_sk\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/registerCompany",
+			"request": {
+				"url": "http://localhost:3000/registerCompany",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"companyCRN\" : \"upgrad\", \n\t\"companyName\" : \"RET002\",\n\t\"location\" : \"Mumbai\", \n\t\"organisationRole\":  \"Retailer\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/addDrug",
+			"request": {
+				"url": "http://localhost:3000/addDrug",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"drugName\": \"Paracetamol\",\n\t\"serialNo\": \"001\",\n\t\"mfgData\" : \"sample manufacturer data\",\n\t\"expDate\" : \"2021-01-22\",\n\t\"companyCRN\" : \"MAN001\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/registerCompany?org=sun_pharma",
+			"request": {
+				"url": "http://localhost:3000/registerCompany",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"companyCRN\" : \"FedEx\", \n\t\"companyName\" : \"TRA001\",\n\t\"location\" : \"Delhi\", \n\t\"organisationRole\":  \"Transporter\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/registerCompany?org=fedex",
+			"request": {
+				"url": "http://localhost:3000/registerCompany",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"companyCRN\" : \"FedEx\", \n\t\"companyName\" : \"TRA001\",\n\t\"location\" : \"Delhi\", \n\t\"organisationRole\":  \"Transporter\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/registerCompany?org=blue_dart",
+			"request": {
+				"url": "http://localhost:3000/registerCompany",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"companyCRN\" : \"Blue Dart\", \n\t\"companyName\" : \"TRA002\",\n\t\"location\" : \"TRA002\", \n\t\"organisationRole\":  \"Transporter\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/registerCompany?org=vg_pharma",
+			"request": {
+				"url": "http://localhost:3000/registerCompany",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"companyCRN\" : \"VG Pharma\", \n\t\"companyName\" : \"DIST001\",\n\t\"location\" : \"Vizag\", \n\t\"organisationRole\":  \"Distributor\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/registerCompany?org=upgrad",
+			"request": {
+				"url": "http://localhost:3000/registerCompany",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"companyCRN\" : \"upgrad\", \n\t\"companyName\" : \"RET002\",\n\t\"location\" : \"Mumbai\", \n\t\"organisationRole\":  \"Retailer\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

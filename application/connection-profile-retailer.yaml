@@ -87,7 +87,7 @@ orderers:
     grpcOptions:
       ssl-target-name-override: orderer.pharma-network.com
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/ordererOrganizations/pharma-network.com/orderers/orderer.pharma-network.com/msp/tlscacerts/tlsca.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/ordererOrganizations/pharma-network.com/orderers/orderer.pharma-network.com/msp/tlscacerts/tlsca.pharma-network.com-cert.pem
 
 peers:
   peer0.manufacturer.pharma-network.com:
@@ -96,42 +96,42 @@ peers:
       ssl-target-name-override: peer0.manufacturer.pharma-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/peers/peer0.manufacturer.pharma-network.com/msp/tlscacerts/tlsca.manufacturer.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/peers/peer0.manufacturer.pharma-network.com/msp/tlscacerts/tlsca.manufacturer.pharma-network.com-cert.pem
   peer1.manufacturer.pharma-network.com:
     url: grpc://localhost:8051
     grpcOptions:
       ssl-target-name-override: peer1.manufacturer.pharma-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/peers/peer1.manufacturer.pharma-network.com/msp/tlscacerts/tlsca.manufacturer.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/peers/peer1.manufacturer.pharma-network.com/msp/tlscacerts/tlsca.manufacturer.pharma-network.com-cert.pem
   peer0.distributor.pharma-network.com:
     url: grpc://localhost:9051
     grpcOptions:
       ssl-target-name-override: peer0.distributor.pharma-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/peerOrganizations/distributor.pharma-network.com/peers/peer0.distributor.pharma-network.com/msp/tlscacerts/tlsca.distributor.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/distributor.pharma-network.com/peers/peer0.distributor.pharma-network.com/msp/tlscacerts/tlsca.distributor.pharma-network.com-cert.pem
   peer1.distributor.pharma-network.com:
     url: grpc://localhost:10051
     grpcOptions:
       ssl-target-name-override: peer1.distributor.pharma-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/peerOrganizations/distributor.pharma-network.com/peers/peer1.distributor.pharma-network.com/msp/tlscacerts/tlsca.distributor.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/distributor.pharma-network.com/peers/peer1.distributor.pharma-network.com/msp/tlscacerts/tlsca.distributor.pharma-network.com-cert.pem
   peer0.retailer.pharma-network.com:
     url: grpc://localhost:11051
     grpcOptions:
       ssl-target-name-override: peer0.retailer.pharma-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/peerOrganizations/retailer.pharma-network.com/peers/peer0.retailer.pharma-network.com/msp/tlscacerts/tlsca.retailer.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/retailer.pharma-network.com/peers/peer0.retailer.pharma-network.com/msp/tlscacerts/tlsca.retailer.pharma-network.com-cert.pem
   peer1.retailer.pharma-network.com:
     url: grpc://localhost:12051
     grpcOptions:
       ssl-target-name-override: peer1.retailer.pharma-network.com
       request-timeout: 120001
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/peerOrganizations/retailer.pharma-network.com/peers/peer1.retailer.pharma-network.com/msp/tlscacerts/tlsca.retailer.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/retailer.pharma-network.com/peers/peer1.retailer.pharma-network.com/msp/tlscacerts/tlsca.retailer.pharma-network.com-cert.pem
 
 certificateAuthorities:
   ca.manufacturer.pharma-network.com:
@@ -139,7 +139,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/ca/ca.manufacturer.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/ca/ca.manufacturer.pharma-network.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
@@ -149,7 +149,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/peerOrganizations/distributor.pharma-network.com/ca/ca.distributor.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/distributor.pharma-network.com/ca/ca.distributor.pharma-network.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
@@ -159,7 +159,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: /home/byteprojects/workspace/pharma-network/network/crypto-config/peerOrganizations/retailer.pharma-network.com/ca/ca.retailer.pharma-network.com-cert.pem
+      path: /home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/retailer.pharma-network.com/ca/ca.retailer.pharma-network.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw

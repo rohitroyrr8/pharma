@@ -1,31 +1,27 @@
 'use strict';
 
-/**
- * This is a Node.JS application to add a new student on the network.
- */
-
 const fs = require('fs');
 const yaml = require('js-yaml');
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const helper = require('./contractHelper');	
 let gateway;
 
-async function main(studentId, name, email) {
+async function main(companyCRN, companyName, location, organisationRole) {
 
 	try {
 
 		const contract = await helper.getContractInstance();
 
 		// Create a new student account
-		console.log('.....Create a new Student account');
-		const studentBuffer = await contract.submitTransaction('createStudent', studentId, name, email);
+		console.log('.....Registering a new company');
+		const buffer = await contract.submitTransaction('registerCompany', companyCRN, companyName, location, organisationRole);
 
 		// process response
-		console.log('.....Processing Create Student Transaction Response \n\n');
-		let newStudent = JSON.parse(studentBuffer.toString());
-		console.log(newStudent);
-		console.log('\n\n.....Create Student Transaction Complete!');
-		return newStudent;
+		console.log('.....Processing Registering Company Transaction Response \n\n');
+		let obj = JSON.parse(buffer.toString());
+		console.log(obj);
+		console.log('\n\n.....Register Company Transaction Complete!');
+		return obj;
 
 	} catch (error) {
 
@@ -41,7 +37,7 @@ async function main(studentId, name, email) {
 	}
 }
 
-main('200', 'Aakash Bansal', 'connect@aakashbansal.com').then(() => {
+main('Sun Pharma', 'Aakash Bansal', 'connect@aakashbansal.com', "Manufacturer").then(() => {
 	console.log('Student account created');
 });
 

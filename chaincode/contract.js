@@ -7,7 +7,18 @@ class PharmanetContract extends Contract {
 	constructor() {
 		// Provide a custom name to refer to this smart contract
 		super('org.pharma-network.pharmanet');
+		global.manufacturerOrg = 'manufacturer.pharma-network.com';
+  		global.distributorOrg = 'distriburtor.pharma-network.com'
+  		global.retailerOrg = 'retailer.pharma-network.com'
+  		global.transporterOrg = 'transporter.pharma-network.com'
 	}
+	
+	validateInitiator(ctx, initiator) {
+    	const initiatorID  =ctx.clientIdentity.trim().getX509Certificate();
+    	if(initiatorID.issuer.organizationName.trim() !== initiator)  {
+	    	throw new Error('Not authorized to initiate the transaction: ' + initiatorID.issuer.organizationName + ' not authorised to initiate this transaction');
+    	}
+    }
 	
 	/* ****** All custom functions are defined below ***** */
 	
@@ -17,14 +28,6 @@ class PharmanetContract extends Contract {
 		console.log('Pharmanet Smart Contract Instantiated');
 	}
 	
-	/**
-	 * Create a new student account on the network
-	 * @param ctx - The transaction context object
-	 * @param studentId - ID to be used for creating a new student account
-	 * @param name - Name of the student
-	 * @param email - Email ID of the student
-	 * @returns
-	 */
 	async createStudent(ctx, studentId, name, email) {
 		// Create a new composite key for the new student account
 		const studentKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.student', [studentId]);
@@ -45,6 +48,134 @@ class PharmanetContract extends Contract {
 		// Return value of new student account created to user
 		return newStudentObject;
 	}
+
+	/**
+	 * register a new distriburtor company on to the network
+	 * @param ctx - The transaction context object
+	 * @param companyCRN
+	 * @param companyName
+	 * @param location
+	 * @returns newCompanyObj
+	 */
+	async registerCompany(ctx, companyCRN, companyName, location, organisationRole) {
+		const companyKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.company', [companyCRN]);
+		const companyId = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.company', [companyCRN+'-'+companyName]);
+		let hierarchyKey;
+		switch(organisationRole) {
+			case 'Manufacturer' : 
+					hierarchyKey = 1;
+					break;
+			case 'Distributor' : 
+					hierarchyKey = 2;
+					break;
+			case 'Retailer' : 
+					hierarchyKey = 3;
+					break;
+			case 'Transporter' : 
+					hierarchyKey = 4;
+					break;
+			default : 
+					throw new Error('invalid organisationRole found');
+					break;
+		}
+
+		let newCompanyObj = {
+			companyId : companyId,	
+			companyName : companyName,
+			location : location,
+			organisationRole : organisationRole,
+			hierarchyKey : hierarchyKey,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};		
+
+		let dataBuffer = Buffer.from(JSON.stringify(newCompanyObj));
+		await ctx.stub.putState(companyKey, dataBuffer);
+		return newCompanyObj;
+	}
+	
+	/**
+	 * register a new drug on to the network
+	 *
+	 */
+	async addDrug(ctx, drugName, serialNo, mfgData, expDate, companyCRN) {
+		const productKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.drug', [drugName+'-'+serialNo]);
+		const manufacturerKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.manufacturer', [companyCRN]);
+
+		this.validateInitiator(ctx, manufacturerOrg);
+
+		let newDrugObj = {
+			productId : productKey,
+			drugName : drugName,
+			manufacturer : manufacturerKey,
+			mfgData : mfgData,
+			expDate : expDate,
+			owner : manufacturerKey,
+			shippment : '',
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};		
+
+		let dataBuffer = Buffer.from(JSON.stringify(newDrugObj));
+		await ctx.stub.putState(productKey, dataBuffer);
+		return newDrugObj;
+	}
+
+	/**
+	 Function to create a new Purchase Order
+	 */
+	
+	async createPO (ctx, buyerCRN, sellerCRN, drugName, quantity) {
+		
+		//create the keys
+		const purchaseKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.purchase-order', [buyerCRN+'-'+drugName]);
+		const buyerKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.company', [buyerCRN]);
+		const sellerKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.company', [sellerCRN]);
+
+		let buyerBuffer =  await ctx.stub
+				.getState(buyerKey)
+				.catch(err => console.log(err));
+		let buyerObject = JSON.parse(buyerBuffer.toString());
+
+
+		let sellerBuffer =  await ctx.stub
+				.getState(sellerKey)
+				.catch(err => console.log(err));
+		let sellerObject = JSON.parse(sellerBuffer.toString());
+
+
+		// Validations Checked starts here 
+		// check if the intitator of POis Distributor or Retailer
+		if (!(this.validateInitiator(ctx,distributorOrg)) || (this.validateInitiator(ctx,retailerOrg))) {
+
+			throw new Error('Purchase Order can be created by companies belonging to Distributor or Retailer Oraganisation');
+		}
+
+		// check if drug transfer takes place in hierarchal manner
+
+		if ( (sellerObject.hierarchyKey - buyerObject.hierarchyKey ) < 1 ) {
+
+			throw new Error('Tranfer of Drug can take place in hierarchal manner only');
+		
+		} else {
+
+			let newPOObj = {
+			poId : purchaseKey,
+			drugName : drugName,
+			quantity : quantity,
+			buyer : buyerKey,
+			seller : sellerKey,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};		
+
+		let dataBuffer = Buffer.from(JSON.stringify(newPOObj));
+		await ctx.stub.putState(purchaseKey, dataBuffer);
+		return newPOObj;
+
+		}	
+	}
+
 	
 	/**
 	 * Get a student account's details from the blockchain

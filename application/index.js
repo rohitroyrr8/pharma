@@ -5,9 +5,17 @@ const port = 3000;
 
 // Import all function modules
 const addToWallet = require('./1_addToWallet');
+
 const createStudent = require('./2_createStudent');
-const issueCertificate = require('./4_issueCertificate');
-const verifyCertificate = require('./5_verifyCertificate');
+
+const registerCompany = require('./2_registerCompany');
+const addDrug = require('./3_addDrug');
+const createPO = require('./4_createPO');
+const createShipment = require('./5_createShipment');
+const updateShipment = require('./6_updateShipment');
+const retailDrug = require('./7_retailDrug');
+const viewHistory = require('./8_viewHistory');
+const viewDrugCurrentState = require('./9_viewDrugCurrentState');
 
 // Define Express app settings
 app.use(cors());
@@ -37,6 +45,49 @@ app.post('/addToWallet', (req, res) => {
 			});
 });
 
+
+app.post('/registerCompany', (req, res) => {
+	registerCompany.execute(req.body.companyCRN, req.body.companyName, req.body.location, req.body.organisationRole)
+			.then((obj) => {
+				console.log('Comapny Registered!!');
+				const result = {
+					status: 'success',
+					message: 'New Company Registered',
+					obj: obj
+				};
+				res.json(result);
+			})
+			.catch((e) => {
+				const result = {
+					status: 'error',
+					message: 'Failed',
+					error: e
+				};
+				res.status(500).send(result);
+			});
+});
+
+app.post('/addDrug', (req, res) => {
+	addDrug.execute(req.body.drugName, req.body.serialNo, req.body.mfgData, req.body.expDate, req.body.companyCRN)
+			.then((obj) => {
+				console.log('Drug added!!');
+				const result = {
+					status: 'success',
+					message: 'Drug added',
+					obj: obj
+				};
+				res.json(result);
+			})
+			.catch((e) => {
+				const result = {
+					status: 'error',
+					message: 'Failed',
+					error: e
+				};
+				res.status(500).send(result);
+			});
+});
+
 app.post('/newStudent', (req, res) => {
 	createStudent.execute(req.body.studentId, req.body.name, req.body.email)
 			.then((student) => {
@@ -45,48 +96,6 @@ app.post('/newStudent', (req, res) => {
 					status: 'success',
 					message: 'New student account created',
 					student: student
-				};
-				res.json(result);
-			})
-			.catch((e) => {
-				const result = {
-					status: 'error',
-					message: 'Failed',
-					error: e
-				};
-				res.status(500).send(result);
-			});
-});
-
-app.post('/issueCertificate', (req, res) => {
-	issueCertificate.execute(req.body.studentId, req.body.courseId, req.body.grade, req.body.hash)
-			.then((certificate) => {
-				console.log('New certificate issued to student');
-				const result = {
-					status: 'success',
-					message: 'New certificate issued to student',
-					certificate: certificate
-				};
-				res.json(result);
-			})
-			.catch((e) => {
-				const result = {
-					status: 'error',
-					message: 'Failed',
-					error: e
-				};
-				res.status(500).send(result);
-			});
-});
-
-app.post('/verifyCertificate', (req, res) => {
-	verifyCertificate.execute(req.body.studentId, req.body.courseId, req.body.hash)
-			.then((verifyResult) => {
-				console.log('Verification result available');
-				const result = {
-					status: 'success',
-					message: 'Verification result available',
-					verifyResult: verifyResult
 				};
 				res.json(result);
 			})

@@ -45,7 +45,7 @@ installChaincode 0 'retailer' $VERSION
 
 # retailere chaincode on the channel using peer0.manufacturer
 echo "upgrading chaincode on channel using peer0.manufacturer.pharma-network.com ..."
-retailereChaincode 0 'manufacturer' $VERSION
+upgradeChaincode 0 'manufacturer' $VERSION
 
 echo
 echo "========= All GOOD, Chaincode PHARMANET Is Now Updated To Version '$VERSION' =========== "
