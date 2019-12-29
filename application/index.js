@@ -21,7 +21,7 @@ const viewDrugCurrentState = require('./9_viewDrugCurrentState');
 app.use(cors());
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.set('title', 'Certification App');
+app.set('title', 'Pharma App');
 
 app.get('/', (req, res) => res.send('hello world'));
 
@@ -88,6 +88,130 @@ app.post('/addDrug', (req, res) => {
 			});
 });
 
+app.post('/createPO', (req, res) => {
+	createPO.execute(req.body.buyerCRN, req.body.sellerCRN, req.body.drugName, req.body.quantity)
+			.then((obj) => {
+				console.log('Purchase Order added!!');
+				const result = {
+					status: 'success',
+					message: 'Purchase Order added.',
+					obj: obj
+				};
+				res.json(result);
+			})
+			.catch((e) => {
+				const result = {
+					status: 'error',
+					message: 'Failed',
+					error: e
+				};
+				res.status(500).send(result);
+			});
+});
+
+app.post('/createShipment', (req, res) => {
+	createShipment.execute(req.body.buyerCRN, req.body.drugName, req.body.listOfAssets, req.body.transporterCRN)
+			.then((obj) => {
+				console.log('Shipment created!!');
+				const result = {
+					status: 'success',
+					message: 'Shipment created.',
+					obj: obj
+				};
+				res.json(result);
+			})
+			.catch((e) => {
+				const result = {
+					status: 'error',
+					message: 'Failed',
+					error: e
+				};
+				res.status(500).send(result);
+			});
+});
+
+app.post('/updateShipment', (req, res) => {
+	updateShipment.execute(req.body.buyerCRN, req.body.drugName, req.body.transporterCRN)
+			.then((obj) => {
+				console.log('Shipment updated!!');
+				const result = {
+					status: 'success',
+					message: 'Shipment updated.',
+					obj: obj
+				};
+				res.json(result);
+			})
+			.catch((e) => {
+				const result = {
+					status: 'error',
+					message: 'Failed',
+					error: e
+				};
+				res.status(500).send(result);
+			});
+});
+
+app.post('/retailDrug', (req, res) => {
+	retailDrug.execute(req.body.drugName, req.body.serialNo, req.body.retailerCRN, req.body.customerAadhar)
+			.then((obj) => {
+				console.log('Drug retailed!!');
+				const result = {
+					status: 'success',
+					message: 'Drug retailed.',
+					obj: obj
+				};
+				res.json(result);
+			})
+			.catch((e) => {
+				const result = {
+					status: 'error',
+					message: 'Failed',
+					error: e
+				};
+				res.status(500).send(result);
+			});
+});
+
+app.post('/viewHistory', (req, res) => {
+	viewHistory.execute(req.body.drugName, req.body.serialNo)
+			.then((obj) => {
+				const result = {
+					status: 'success',
+					message: 'Drug history found.',
+					obj: obj
+				};
+				res.json(result);
+			})
+			.catch((e) => {
+				const result = {
+					status: 'error',
+					message: 'Failed',
+					error: e
+				};
+				res.status(500).send(result);
+			});
+});
+
+app.post('/viewDrugCurrentState', (req, res) => {
+	viewDrugCurrentState.execute(req.body.drugName, req.body.serialNo)
+			.then((obj) => {
+				const result = {
+					status: 'success',
+					message: 'Drug history found.',
+					obj: obj
+				};
+				res.json(result);
+			})
+			.catch((e) => {
+				const result = {
+					status: 'error',
+					message: 'Failed',
+					error: e
+				};
+				res.status(500).send(result);
+			});
+});
+
 app.post('/newStudent', (req, res) => {
 	createStudent.execute(req.body.studentId, req.body.name, req.body.email)
 			.then((student) => {
@@ -109,4 +233,4 @@ app.post('/newStudent', (req, res) => {
 			});
 });
 
-app.listen(port, () => console.log(`Distributed Certification App listening on port ${port}!`));
+app.listen(port, () => console.log(`Distributed Pharma App listening on port ${port}!`));

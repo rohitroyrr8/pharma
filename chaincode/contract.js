@@ -8,9 +8,9 @@ class PharmanetContract extends Contract {
 		// Provide a custom name to refer to this smart contract
 		super('org.pharma-network.pharmanet');
 		global.manufacturerOrg = 'manufacturer.pharma-network.com';
-  		global.distributorOrg = 'distriburtor.pharma-network.com'
-  		global.retailerOrg = 'retailer.pharma-network.com'
-  		global.transporterOrg = 'transporter.pharma-network.com'
+  		global.distributorOrg = 'distriburtor.pharma-network.com';
+  		global.retailerOrg = 'retailer.pharma-network.com';
+  		global.transporterOrg = 'transporter.pharma-network.com';
 	}
 	
 	validateInitiator(ctx, initiator) {
@@ -102,7 +102,7 @@ class PharmanetContract extends Contract {
 		const productKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.drug', [drugName+'-'+serialNo]);
 		const manufacturerKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.manufacturer', [companyCRN]);
 
-		this.validateInitiator(ctx, manufacturerOrg);
+		//this.validateInitiator(ctx, manufacturerOrg);
 
 		let newDrugObj = {
 			productId : productKey,
@@ -111,7 +111,7 @@ class PharmanetContract extends Contract {
 			mfgData : mfgData,
 			expDate : expDate,
 			owner : manufacturerKey,
-			shippment : '',
+			shippment : [],
 			createdAt: new Date(),
 			updatedAt: new Date(),
 		};		
@@ -132,51 +132,88 @@ class PharmanetContract extends Contract {
 		const buyerKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.company', [buyerCRN]);
 		const sellerKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.company', [sellerCRN]);
 
-		let buyerBuffer =  await ctx.stub
+		try {
+			let buyerBuffer =  await ctx.stub
 				.getState(buyerKey)
 				.catch(err => console.log(err));
-		let buyerObject = JSON.parse(buyerBuffer.toString());
+			let buyerObject = JSON.parse(buyerBuffer.toString());
 
 
-		let sellerBuffer =  await ctx.stub
-				.getState(sellerKey)
-				.catch(err => console.log(err));
-		let sellerObject = JSON.parse(sellerBuffer.toString());
+			let sellerBuffer =  await ctx.stub
+					.getState(sellerKey)
+					.catch(err => console.log(err));
+			let sellerObject = JSON.parse(sellerBuffer.toString());
 
 
-		// Validations Checked starts here 
-		// check if the intitator of POis Distributor or Retailer
-		if (!(this.validateInitiator(ctx,distributorOrg)) || (this.validateInitiator(ctx,retailerOrg))) {
-
-			throw new Error('Purchase Order can be created by companies belonging to Distributor or Retailer Oraganisation');
-		}
-
-		// check if drug transfer takes place in hierarchal manner
-
-		if ( (sellerObject.hierarchyKey - buyerObject.hierarchyKey ) < 1 ) {
-
-			throw new Error('Tranfer of Drug can take place in hierarchal manner only');
-		
-		} else {
-
+			// Validations Checked starts here 
+			// check if the intitator of POis Distributor or Retailer
+				
 			let newPOObj = {
-			poId : purchaseKey,
-			drugName : drugName,
-			quantity : quantity,
-			buyer : buyerKey,
-			seller : sellerKey,
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		};		
+				poId : purchaseKey,
+				drugName : drugName,
+				quantity : quantity,
+				buyer : buyerKey,
+				seller : sellerKey,
+				createdAt: new Date(),
+				updatedAt: new Date()
+			};	
 
-		let dataBuffer = Buffer.from(JSON.stringify(newPOObj));
-		await ctx.stub.putState(purchaseKey, dataBuffer);
-		return newPOObj;
-
-		}	
+			let dataBuffer = Buffer.from(JSON.stringify(newPOObj));
+			await ctx.stub.putState(purchaseKey, dataBuffer);
+			return newPOObj;
+		} catch(err) {
+			let result = {
+				error : err
+			};
+			return result;
+		}
 	}
 
+	async retailDrug(ctx, drugName, serialNo, retailerCRN, customerAadhar) {
+		
+		//check the intiator of the tx is retailer
+		//this.validateInitiator(ctx, retailerOrg);
+
+		const productKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.drug', [drugName+'-'+serialNo]);
+		const retailerKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.company', [retailerCRN]);
+		// fetch the drug with the respective product key
+
+		let assetBuffer = await ctx.stub
+				.getState(productKey)
+				.catch(err => console.log(err));
+			
+
+		let assetObject = JSON.parse(assetBuffer.toString());
+
+		// change the ownership with the drug 
+		assetObject.owner = customerAadhar;
+		//push the new key to  the shipment list of Drug object
+		assetObject.shipment = retailerKey;
+		let dataBuffer = Buffer.from(JSON.stringify(assetObject));
+		await ctx.stub.putState(productKey, dataBuffer);
+		return assetObject;
+
+
+	}
+
+	async viewHistory(ctx, drugName, serialNo) {
+
+		//create the key for the product whose transaction history needs to be traced
+		const productKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.drug', [drugName+'-'+serialNo]);
+
+		//return the history as per the product key
+		return await ctx.stub.getHistoryForKey(productKey);
+
+	}
 	
+	async viewDrugCurrentState (ctx, drugName, serialNo) {
+
+		const productKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.drug', [drugName+'-'+serialNo]);
+		let productBuffer= await ctx.stub.getState(productKey).catch(err => console.log(err));
+		let productObject= JSON.parse(productBuffer.toString());
+		return productObject;
+
+	}
 	/**
 	 * Get a student account's details from the blockchain
 	 * @param ctx - The transaction context
@@ -194,97 +231,6 @@ class PharmanetContract extends Contract {
 		return JSON.parse(studentBuffer.toString());
 	}
 	
-	/**
-	 * Issue a certificate to the student after completing the course
-	 * @param ctx
-	 * @param studentId
-	 * @param courseId
-	 * @param gradeReceived
-	 * @param originalHash
-	 * @returns {Object}
-	 */
-	async issueCertificate(ctx, studentId, courseId, gradeReceived, originalHash) {
-		let msgSender = ctx.clientIdentity.getID();
-		let certificateKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.certificate',[courseId + '-' + studentId]);
-		let studentKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.student', [studentId]);
-		
-		// Fetch student with given ID from blockchain
-		let student = await ctx.stub
-				.getState(studentKey)
-				.catch(err => console.log(err));
-		
-		// Fetch certificate with given ID from blockchain
-		let certificate = await ctx.stub
-				.getState(certificateKey)
-				.catch(err => console.log(err));
-		
-		// Make sure that student already exists and certificate with given ID does not exist.
-		if (student.length === 0 || certificate.length !== 0) {
-			throw new Error('Invalid Student ID: ' + studentId + ' or Course ID: ' + courseId + '. Either student does not exist or certificate already exists.');
-		} else {
-			let certificateObject = {
-				studentId: studentId,
-				courseId: courseId,
-				teacher: msgSender,
-				certId: courseId + '-' + studentId,
-				originalHash: originalHash,
-				grade: gradeReceived,
-				createdAt: new Date(),
-				updatedAt: new Date(),
-			};
-			// Convert the JSON object to a buffer and send it to blockchain for storage
-			let dataBuffer = Buffer.from(JSON.stringify(certificateObject));
-			await ctx.stub.putState(certificateKey, dataBuffer);
-			// Return value of new certificate issued to student
-			return certificateObject;
-		}
-	}
-	
-	/**
-	 *
-	 * @param ctx
-	 * @param studentId
-	 * @param courseId
-	 * @param currentHash
-	 * @returns {Object}
-	 */
-	async verifyCertificate(ctx, studentId, courseId, currentHash) {
-		let verifier = ctx.clientIdentity.getID();
-		let certificateKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.certificate', [courseId + '-' + studentId]);
-		
-		// Fetch certificate with given ID from blockchain
-		let certificateBuffer = await ctx.stub
-				.getState(certificateKey)
-				.catch(err => console.log(err));
-		
-		// Convert the received certificate buffer to a JSON object
-		const certificate = JSON.parse(certificateBuffer.toString());
-		
-		// Check if original certificate hash matches the current hash provided for certificate
-		if (certificate === undefined || certificate.originalHash !== currentHash) {
-			// Certificate is not valid, issue event notifying the student application
-			let verificationResult = {
-				certificate: courseId + '-' + studentId,
-				student: studentId,
-				verifier: verifier,
-				result: 'xxx - INVALID',
-				verifiedOn: new Date()
-			};
-			ctx.stub.setEvent('verifyCertificate', Buffer.from(JSON.stringify(verificationResult)));
-			return verificationResult;
-		} else {
-			// Certificate is valid, issue event notifying the student application
-			let verificationResult = {
-				certificate: courseId + '-' + studentId,
-				student: studentId,
-				verifier: verifier,
-				result: '*** - VALID',
-				verifiedOn: new Date()
-			};
-			ctx.stub.setEvent('verifyCertificate', Buffer.from(JSON.stringify(verificationResult)));
-			return verificationResult;
-		}
-	}
 	
 }
 

@@ -42,7 +42,7 @@ async function main(certificatePath, privateKeyPath) {
 	}
 }
 
-main('/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/users/Admin@manufacturer.pharma-network.com/msp/signcerts/Admin@manufacturer.pharma-network.com-cert.pem', '/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/users/Admin@manufacturer.pharma-network.com/msp/keystore/dd241a46ed820fd5a915c63ecd05b67c1d62c80ed5c421d187d7e0ea3cfe3225_sk').then(() => {
+main('/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/users/Admin@manufacturer.pharma-network.com/msp/signcerts/Admin@manufacturer.pharma-network.com-cert.pem', '/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/users/Admin@manufacturer.pharma-network.com/msp/keystore/d9d4a3461430392634273eacb5bb0b809389a1e567cb7c26933c874d5d9bfa37_sk').then(() => {
   console.log('User identity added to wallet.');
 });
 

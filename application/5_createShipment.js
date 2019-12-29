@@ -7,7 +7,7 @@ async function main(buyerCRN, drugName, listOfAssets, transporterCRN) {
 
 	try {
 		const contract = await helper.getContractInstance();
-
+		console.log('.....Processing Create Shipment Transaction Request \n\n');
 		const buffer = await contract.submitTransaction('createShipment', buyerCRN, drugName, listOfAssets, transporterCRN);
 		// process response
 		console.log('.....Processing Create Shipment Transaction Response \n\n');

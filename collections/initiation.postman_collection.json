@@ -28,26 +28,6 @@
 			"response": []
 		},
 		{
-			"name": "http://localhost:3000/registerCompany",
-			"request": {
-				"url": "http://localhost:3000/registerCompany",
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"companyCRN\" : \"upgrad\", \n\t\"companyName\" : \"RET002\",\n\t\"location\" : \"Mumbai\", \n\t\"organisationRole\":  \"Retailer\"\n}"
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
 			"name": "http://localhost:3000/addDrug",
 			"request": {
 				"url": "http://localhost:3000/addDrug",
@@ -61,7 +41,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"drugName\": \"Paracetamol\",\n\t\"serialNo\": \"001\",\n\t\"mfgData\" : \"sample manufacturer data\",\n\t\"expDate\" : \"2021-01-22\",\n\t\"companyCRN\" : \"MAN001\"\n}"
+					"raw": "{\n\t\"drugName\": \"Paracetamol\",\n\t\"serialNo\": \"004\",\n\t\"mfgData\" : \"sample manufacturer data\",\n\t\"expDate\" : \"2023-01-02\",\n\t\"companyCRN\" : \"MAN001\"\n}"
 				},
 				"description": ""
 			},
@@ -81,7 +61,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"companyCRN\" : \"FedEx\", \n\t\"companyName\" : \"TRA001\",\n\t\"location\" : \"Delhi\", \n\t\"organisationRole\":  \"Transporter\"\n}"
+					"raw": "{\n\t\"companyCRN\" : \"MAN001\", \n\t\"companyName\" : \"Sun Pharma\",\n\t\"location\" : \"Chennai\", \n\t\"organisationRole\":  \"Manufacturer\"\n}"
 				},
 				"description": ""
 			},
@@ -101,7 +81,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"companyCRN\" : \"FedEx\", \n\t\"companyName\" : \"TRA001\",\n\t\"location\" : \"Delhi\", \n\t\"organisationRole\":  \"Transporter\"\n}"
+					"raw": "{\n\t\"companyCRN\" : \"TRA001\", \n\t\"companyName\" : \"FedEx\",\n\t\"location\" : \"Delhi\", \n\t\"organisationRole\":  \"Transporter\"\n}"
 				},
 				"description": ""
 			},
@@ -121,7 +101,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"companyCRN\" : \"Blue Dart\", \n\t\"companyName\" : \"TRA002\",\n\t\"location\" : \"TRA002\", \n\t\"organisationRole\":  \"Transporter\"\n}"
+					"raw": "{\n\t\"companyCRN\" : \"TRA002\", \n\t\"companyName\" : \"Blue Dart\",\n\t\"location\" : \"Bangalore\", \n\t\"organisationRole\":  \"Transporter\"\n}"
 				},
 				"description": ""
 			},
@@ -141,7 +121,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"companyCRN\" : \"VG Pharma\", \n\t\"companyName\" : \"DIST001\",\n\t\"location\" : \"Vizag\", \n\t\"organisationRole\":  \"Distributor\"\n}"
+					"raw": "{\n\t\"companyCRN\" : \"DIST001\", \n\t\"companyName\" : \"VG Pharma\",\n\t\"location\" : \"Vizag\", \n\t\"organisationRole\":  \"Distributor\"\n}"
 				},
 				"description": ""
 			},
@@ -161,7 +141,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"companyCRN\" : \"upgrad\", \n\t\"companyName\" : \"RET002\",\n\t\"location\" : \"Mumbai\", \n\t\"organisationRole\":  \"Retailer\"\n}"
+					"raw": "{\n\t\"companyCRN\" : \"RET002\", \n\t\"companyName\" : \"upgrad\",\n\t\"location\" : \"Mumbai\", \n\t\"organisationRole\":  \"Retailer\"\n}"
 				},
 				"description": ""
 			},
