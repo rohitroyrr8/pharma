@@ -1,0 +1,131 @@
+{
+	"variables": [],
+	"info": {
+		"name": "supply chain",
+		"_postman_id": "be13ffbd-caf6-718b-5b58-93da777dbabf",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/createPO",
+			"request": {
+				"url": "http://localhost:3000/createPO",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"buyerCRN\" : \"\",\n\t\"sellerCRN\" : \"\",\n\t\"drugName\" : \"\",\n\t\"quantity\" : \"\"\n\t\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/createPO?id=part1_a",
+			"request": {
+				"url": "http://localhost:3000/createPO",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"buyerCRN\" : \"DIST001\",\n\t\"sellerCRN\" : \"MAN001\",\n\t\"drugName\" : \"Paracetamol\",\n\t\"quantity\" : \"3\"\n\t\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/createShippment?id=part1_b",
+			"request": {
+				"url": "http://localhost:3000/createShipment",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"buyerCRN\": \"DIST001\",\n\t\"drugName\" : \"Paracetamol\",\n\t\"listOfAssets\" : [\n\t\t{\"drugName\" : \"Paracetamol\",\n\t\t\"serialNo\" : \"001\"},\n\t\t{\"drugName\" : \"Paracetamol\",\n\t\t\"serialNo\" : \"002\"},\n\t\t{\"drugName\" : \"Paracetamol\",\n\t\t\"serialNo\" : \"003\"}\n\t\t\n\t],\n\t\"transporterCRN\" : \"TRA001\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/retailDrug?id=partc",
+			"request": {
+				"url": "http://localhost:3000/retailDrug",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"drugName\" : \"Paracetamol\",\n\t\"serialNo\" : \"001\",\n\t\"retailerCRN\": \"RET002\",\n\t\"customerAadhar\" : \"0123456789\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/createPO?id=part_b_1",
+			"request": {
+				"url": "http://localhost:3000/createPO",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"buyerCRN\" : \"RET002\",\n\t\"sellerCRN\" : \"DIST001\",\n\t\"drugName\" : \"Paracetamol\",\n\t\"quantity\" : \"2\"\n\t\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/updateShipment?id=part_a_3",
+			"request": {
+				"url": "http://localhost:3000/updateShipment",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"buyerCRN\": \"\",\n\t\"drugName\": \"\",\n\t\"transporterCRN\": \"\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

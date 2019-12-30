@@ -4,7 +4,7 @@
  * This is a Node.JS module to load a user's Identity to his wallet.
  * This Identity will be used to sign transactions initiated by this user.
  * Defaults:
- *  User Name: DISTRIBUTOR_ADMIN
+ *  User Name: manufacturer_ADMIN
  *  User Organization: manufacturer
  *  User Role: Admin
  *
@@ -42,7 +42,7 @@ async function main(certificatePath, privateKeyPath) {
 	}
 }
 
-main('/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/users/Admin@manufacturer.pharma-network.com/msp/signcerts/Admin@manufacturer.pharma-network.com-cert.pem', '/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/users/Admin@manufacturer.pharma-network.com/msp/keystore/4fbb206fe05598155df1d03db280cf1dab54357f56fd42bca7d2d1376fbb81cf_sk').then(() => {
+main('/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/users/Admin@manufacturer.pharma-network.com/msp/signcerts/Admin@manufacturer.pharma-network.com-cert.pem', '/home/byteprojects/workspace/pharma/network/crypto-config/peerOrganizations/manufacturer.pharma-network.com/users/Admin@manufacturer.pharma-network.com/msp/keystore/55a805be48dae732865a678af97dece2fa4c5d8755700949819248afa5481ca6_sk').then(() => {
   console.log('User identity added to wallet.');
 });
 

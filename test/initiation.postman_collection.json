@@ -41,7 +41,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"drugName\": \"Paracetamol\",\n\t\"serialNo\": \"004\",\n\t\"mfgData\" : \"sample manufacturer data\",\n\t\"expDate\" : \"2023-01-02\",\n\t\"companyCRN\" : \"MAN001\"\n}"
+					"raw": "{\n\t\"drugName\": \"Paracetamol\",\n\t\"serialNo\": \"001\",\n\t\"mfgData\" : \"sample manufacturer data\",\n\t\"expDate\" : \"2023-01-02\",\n\t\"companyCRN\" : \"MAN001\"\n}"
 				},
 				"description": ""
 			},

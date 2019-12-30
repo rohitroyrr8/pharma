@@ -28,29 +28,8 @@ class PharmanetContract extends Contract {
 		console.log('Pharmanet Smart Contract Instantiated');
 	}
 	
-	async createStudent(ctx, studentId, name, email) {
-		// Create a new composite key for the new student account
-		const studentKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.student', [studentId]);
-		
-		// Create a student object to be stored in blockchain
-		let newStudentObject = {
-			studentId: studentId,
-			name: name,
-			email: email,
-			school: ctx.clientIdentity.getID(),
-			createdAt: new Date(),
-			updatedAt: new Date(),
-		};
-		
-		// Convert the JSON object to a buffer and send it to blockchain for storage
-		let dataBuffer = Buffer.from(JSON.stringify(newStudentObject));
-		await ctx.stub.putState(studentKey, dataBuffer);
-		// Return value of new student account created to user
-		return newStudentObject;
-	}
-
 	/**
-	 * register a new distriburtor company on to the network
+	 * register a new company on to the network
 	 * @param ctx - The transaction context object
 	 * @param companyCRN
 	 * @param companyName
@@ -168,7 +147,111 @@ class PharmanetContract extends Contract {
 			return result;
 		}
 	}
+	
+	async createShipment (ctx, buyerCRN, drugName, listOfAssets, transporterCRN ) {
+		const purchaseKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.purchase-order', [buyerCRN+'-'+drugName]);
+		const companyKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.company', [transporterCRN]);
+	    
+	    let companybuffer =  await ctx.stub
+					.getState(companyKey)
+					.catch(err => console.log(err));
+		let companyObject = JSON.parse(companyBuffer.toString());
+		let transporterName = companyObject.companyName;
 
+		const transporterKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.shipment-order',[transporterCRN+'-'+transporterName]);
+		const shipmentKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.shipment-order',[buyerCRN+'-'+drugName]);
+
+		let orderBuffer = await ctx.stub
+				.getState(purchaseKey)
+				.catch(err => console.log(err));
+		let orderObject = JSON.parse(orderBuffer.toString());
+
+		// check if the purchase order quantity is same as list of assests
+
+		if ( orderObject.quantity !== listOfAssets.length) {
+			throw new Error('Purchase Order quantities do not match');
+		}
+		
+		
+		let array = JSON.parse(listOfAssets);
+		array.forEach(function (ass, index) {
+			
+			const drugKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.drug', [drugName+'-'+ass]);
+			//get state
+			let assestBuffer = await ctx.stub
+				.getState(drugKey)
+				.catch(err => console.log(err));	
+			if ( assetBuffer === 0)  {
+				throw new Error('Invalid Durgname or Serial No');
+
+			}
+
+			let assetObject = JSON.parse(assetBuffer.toString());
+			assetObject.owner = transporterKey;
+			let dataBuffer = Buffer.from(JSON.stringify(assetObject));
+			await ctx.stub.putState(drugKey, dataBuffer);
+			assetArray.push(drugKey);
+			
+		}); 
+
+
+		// shipment  data model
+		let newShipmentObj = {
+			shipmentId : shipmentKey,
+			creator : ctx.clientIdentity.getID(),
+			assests : assetArray,
+			transporter : transporterKey,
+			status: 'in-transit',
+			createdAt: new Date(),
+			updatedAt: new Date(),
+		};
+
+		let dataBuffer = Buffer.from(JSON.stringify(newShipmentObj));
+		await ctx.stub.putState(shipmentKey, dataBuffer);
+		return newShipmentObj;
+
+	}
+
+	async updateShipment(ctx, buyerCRN, drugName, transporterCRN) {
+		//check if the intitator of Tx is transporter
+		this.validateInitiator(ctx, transporterOrg);
+
+		const shipmentKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.shipment-order',[buyerCRN+'-'+drugName]);	
+
+		 // Fetch shipment order with  from blockchain
+		let shipmentBuffer = await ctx.stub
+				.getState(shipmentKey)
+				.catch(err => console.log(err));
+		let shipmentObject = JSON.parse(orderBuffer.toString());
+
+		
+		//check and update the shipment owner and add this shipment key to shipment key 
+
+		forEach( ass : shipmentObject.assests) {
+		
+			const drugKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.drug', [ass.drugName+'-'+ass.serialNo]);
+			//get state
+			let assestBuffer = await ctx.stub
+				.getState(drugKey)
+				.catch(err => console.log(err));
+			
+
+			let assetObject = JSON.parse(assetBuffer.toString());
+			const buyerKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.company', [buyerCRN]);
+			assetObject.owner = buyerKey;
+			assetObject.shipment.push(shipmentKey);
+			let dataBuffer = Buffer.from(JSON.stringify(assetObject));
+			await ctx.stub.putState(drugKey, dataBuffer);
+		} 
+
+		// change the status of the shipment object
+		shipmentObject.status = 'delivered';
+		shipmentObject.updatedAt = new Date();
+		let dataBuffer = Buffer.from(JSON.stringify(shipmentObject));
+		await ctx.stub.putState(shipmentKey, dataBuffer);
+		return shipmentObject;
+
+	}
 	async retailDrug(ctx, drugName, serialNo, retailerCRN, customerAadhar) {
 		
 		//check the intiator of the tx is retailer
@@ -192,8 +275,6 @@ class PharmanetContract extends Contract {
 		let dataBuffer = Buffer.from(JSON.stringify(assetObject));
 		await ctx.stub.putState(productKey, dataBuffer);
 		return assetObject;
-
-
 	}
 
 	async viewHistory(ctx, drugName, serialNo) {
@@ -202,7 +283,9 @@ class PharmanetContract extends Contract {
 		const productKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.drug', [drugName+'-'+serialNo]);
 
 		//return the history as per the product key
-		return await ctx.stub.getHistoryForKey(productKey);
+		let history = await ctx.stub.getHistoryForKey(productKey);
+		console.log(history);
+		return history
 
 	}
 	
@@ -214,23 +297,6 @@ class PharmanetContract extends Contract {
 		return productObject;
 
 	}
-	/**
-	 * Get a student account's details from the blockchain
-	 * @param ctx - The transaction context
-	 * @param studentId - Student ID for which to fetch details
-	 * @returns
-	 */
-	async getStudent(ctx, studentId) {
-		// Create the composite key required to fetch record from blockchain
-		const studentKey = ctx.stub.createCompositeKey('org.pharma-network.pharmanet.student', [studentId]);
-		
-		// Return value of student account from blockchain
-		let studentBuffer = await ctx.stub
-				.getState(studentKey)
-				.catch(err => console.log(err));
-		return JSON.parse(studentBuffer.toString());
-	}
-	
 	
 }
 

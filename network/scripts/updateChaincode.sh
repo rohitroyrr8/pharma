@@ -21,7 +21,7 @@ TYPE="$5"
 : ${TYPE="basic"}
 
 LANGUAGE=`echo "$LANGUAGE" | tr [:upper:] [:lower:]`
-ORGS="manufacturer distributor retailer"
+ORGS="manufacturer distributor retailer consumer transporter"
 TIMEOUT=15
 
 if [ "$TYPE" = "basic" ]; then
@@ -42,10 +42,25 @@ echo "Updating chaincode on peer0.distributor.pharma-network.com ..."
 installChaincode 0 'distributor' $VERSION
 echo "Updating chaincode on peer0.retailer.pharma-network.com ..."
 installChaincode 0 'retailer' $VERSION
+echo "Updating chaincode on peer0.consumer.pharma-network.com ..."
+installChaincode 0 'consumer' $VERSION
+echo "Updating chaincode on peer0.transporter.pharma-network.com ..."
+installChaincode 0 'transporter' $VERSION
+
+echo "Updating chaincode on peer1.manufacturer.pharma-network.com ..."
+installChaincode 1 'manufacturer' $VERSION
+echo "Updating chaincode on peer1.distributor.pharma-network.com ..."
+installChaincode 1 'distributor' $VERSION
+echo "Updating chaincode on peer1.retailer.pharma-network.com ..."
+installChaincode 1 'retailer' $VERSION
+echo "Updating chaincode on peer1.consumer.pharma-network.com ..."
+installChaincode 1 'consumer' $VERSION
+echo "Updating chaincode on peer1.transporter.pharma-network.com ..."
+installChaincode 1 'transporter' $VERSION
 
 # retailere chaincode on the channel using peer0.manufacturer
 echo "upgrading chaincode on channel using peer0.manufacturer.pharma-network.com ..."
-upgradeChaincode 0 'manufacturer' $VERSION
+retailereChaincode 0 'manufacturer' $VERSION
 
 echo
 echo "========= All GOOD, Chaincode PHARMANET Is Now Updated To Version '$VERSION' =========== "

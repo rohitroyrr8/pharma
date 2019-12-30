@@ -217,6 +217,14 @@ function replacePrivateKey() {
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR" || exit
   sed $OPTS "s/retailer_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
+  cd crypto-config/peerOrganizations/consumer.pharma-network.com/ca/ || exit
+  PRIV_KEY=$(ls *_sk)
+  cd "$CURRENT_DIR" || exit
+  sed $OPTS "s/consumer_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
+  cd crypto-config/peerOrganizations/transporter.pharma-network.com/ca/ || exit
+  PRIV_KEY=$(ls *_sk)
+  cd "$CURRENT_DIR" || exit
+  sed $OPTS "s/transporter_CA_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yml
   # If MacOSX, remove the temporary backup of the docker-compose file
   if [ "$ARCH" == "Darwin" ]; then
     rm docker-compose-e2e.ymlt
@@ -321,6 +329,34 @@ function generateChannelArtifacts() {
   set +x
   if [ $res -ne 0 ]; then
     echo "Failed to generate anchor peer update for retailer..."
+    exit 1
+  fi
+  echo
+
+  echo
+  echo "#################################################################"
+  echo "#######    Generating anchor peer update for consumerMSP   ##########"
+  echo "#################################################################"
+  set -x
+  configtxgen -profile pharmachannel -outputAnchorPeersUpdate ./channel-artifacts/consumerMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg consumerMSP
+  res=$?
+  set +x
+  if [ $res -ne 0 ]; then
+    echo "Failed to generate anchor peer update for consumer..."
+    exit 1
+  fi
+  echo
+
+  echo
+  echo "#################################################################"
+  echo "#######    Generating anchor peer update for transporterMSP   ##########"
+  echo "#################################################################"
+  set -x
+  configtxgen -profile pharmachannel -outputAnchorPeersUpdate ./channel-artifacts/transporterMSPanchors.tx -channelID "$CHANNEL_NAME" -asOrg transporterMSP
+  res=$?
+  set +x
+  if [ $res -ne 0 ]; then
+    echo "Failed to generate anchor peer update for transporter..."
     exit 1
   fi
   echo

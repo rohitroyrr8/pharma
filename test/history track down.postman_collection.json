@@ -1,0 +1,51 @@
+{
+	"variables": [],
+	"info": {
+		"name": "history track down",
+		"_postman_id": "f21b2761-e773-9121-5a8e-36d11d512c6b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/viewHistory?id=1",
+			"request": {
+				"url": "http://localhost:3000/viewHistory",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"drugName\" : \"Paracetamol\",\n\t\"serialNo\" : \"001\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/viewDrugCurrentState?id=2",
+			"request": {
+				"url": "http://localhost:3000/viewDrugCurrentState",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"drugName\" : \"Paracetamol\",\n\t\"serialNo\" : \"001\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

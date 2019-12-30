@@ -5,9 +5,6 @@ const port = 3000;
 
 // Import all function modules
 const addToWallet = require('./1_addToWallet');
-
-const createStudent = require('./2_createStudent');
-
 const registerCompany = require('./2_registerCompany');
 const addDrug = require('./3_addDrug');
 const createPO = require('./4_createPO');
@@ -199,27 +196,6 @@ app.post('/viewDrugCurrentState', (req, res) => {
 					status: 'success',
 					message: 'Drug history found.',
 					obj: obj
-				};
-				res.json(result);
-			})
-			.catch((e) => {
-				const result = {
-					status: 'error',
-					message: 'Failed',
-					error: e
-				};
-				res.status(500).send(result);
-			});
-});
-
-app.post('/newStudent', (req, res) => {
-	createStudent.execute(req.body.studentId, req.body.name, req.body.email)
-			.then((student) => {
-				console.log('New student account created');
-				const result = {
-					status: 'success',
-					message: 'New student account created',
-					student: student
 				};
 				res.json(result);
 			})
